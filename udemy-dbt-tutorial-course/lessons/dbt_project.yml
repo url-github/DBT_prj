@@ -1,0 +1,53 @@
+# Nazwij swój projekt! Nazwy projektów powinny zawierać tylko małe litery i podkreślenia.
+# Dobra nazwa pakietu powinna odzwierciedlać nazwę Twojej organizacji
+# lub zamierzone zastosowanie tych modeli.
+name: 'lessons'
+version: '1.0.0'
+config-version: 2
+
+# Określ, który "profil" dbt zostanie użyty w projekcie.
+# Profile definiują połączenia do baz danych i inne ustawienia środowiskowe.
+profile: 'lessons'
+
+# Określają, w których folderach projektu dbt znajdują się modele SQL,
+# analizy, testy, dane początkowe (seeds), makra i migawki (snapshots).
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Określa folder, w którym dbt przechowuje skompilowane pliki SQL.
+target-path: "target"
+# Określa foldery, które zostaną usunięte podczas czyszczenia (dbt clean).
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Na początku każdego procesu dbt uruchamia makro get_brand_name() w macros/macro_get_brand_name.sql
+# która utworzy funkcję zdefiniowaną przez użytkownika (UDF) w naszym schemacie w BigQuery
+on-run-start:
+  - "{{ get_brand_name() }}"
+
+
+# Konfiguruje modele dbt, określając ich materializację (np. jako tabele w bazie danych),
+# jak również ustawienia dotyczące dokumentacji, takie jak zapisywanie opisów kolumn do BigQuery.
+# Dodatkowo, w tej sekcji możemy określić czas wygaśnięcia tabel.
+# Pełna dokumentacja: https://docs.getdbt.com/docs/configuring-models
+
+models:
+  lessons:
+    +materialized: table # Domyślnie wszystkie modele SQL są materializowane jako widoki
+    +persist_docs: # Zapisuje wszystkie opisy kolumn do BigQuery!
+      relation: true
+      columns: true
+    # Tabela zostanie usunięta po 168 godzinach (7 dniach) od utworzenia
+    # Tabela zostanie usunięta po 8760 godzinach (1 roku) od utworzenia
+    +hours_to_expiration: 8760
+
+# Konfiguruje testy dbt, określając domyślny poziom powagi dla testów w projekcie.
+tests:
+  lessons:
+  # Wszystkie testy w naszym projekcie lekcji domyślnie wyświetlają ostrzeżenie (nie error)
+    +severity: warn 

@@ -1,0 +1,6 @@
+packages:
+- package: Velir/ga4
+  version: 6.0.1
+- package: dbt-labs/dbt_utils
+  version: 1.1.1
+sha1_hash: 975c963ead79c5111c1bc9fe2543c1573e6694de

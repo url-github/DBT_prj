@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: base_ga4__events
+    description: >
+      Podstawowy model zdarzeń, który pobiera wszystkie pola z surowych danych. Wynikowa tabela jest podzielona na partycje według "event_date_dt", co jest przydatne, ponieważ zapytania BQ mogą być buforowane w oparciu o tę tabelę, ale nie w przypadku wyszukiwań za pomocą symboli wieloznacznych z oryginalnych tabel podzielonych na fragmenty.
+      Model ten obsługuje pewne podstawowe transformacje i zmianę nazwy poza podstawowym modelem zdarzeń. Zdarzenia są deduplikowane poprzez wyszukiwanie zduplikowanych ładunków zdarzeń i parametrów zdarzeń. Więcej dokumentacji tutaj: https://support.google.com/analytics/answer/7029846
+    columns:
+      - name: event_date_dt
+        description: Data zdarzenia przekonwertowana na typ daty. Strefa czasowa to strefa czasowa skonfigurowana w usłudze GA4.
+      - name: event_timestamp
+        description: >
+          Znacznik czasu (w mikrosekundach) wskazujący, kiedy odebrano partię zdarzenia (w przeciwieństwie do tego, kiedy zdarzenie faktycznie miało miejsce).
+          Strefa czasowa jest technicznie UTC, ale w sensie praktycznym jest ustawiona na strefę czasową skonfigurowaną we właściwości GA4.
+          W PL jest to: UTC+1
+      - name: user_campaign
+        description: >
+          Zawiera początkową nazwę kampanii, która sprowadziła użytkownika do usługi. Nazwa została zmieniona z traffic_source.name.
+          Z dokumentacji Google: nazwa kampanii marketingowej, która jako pierwsza pozyskała użytkownika. Pole to nie jest wypełniane w tabelach intraday.
+          Uwaga: atrybucja źródła ruchu opiera się na ostatnim kliknięciu w wielu kanałach. Wartości traffic_source nie zmieniają się, jeśli użytkownik po instalacji wchodzi w interakcję z kolejnymi kampaniami.
+          https://support.google.com/analytics/answer/7029846?hl=en#zippy=%2Ctraffic-source
+      - name: user_medium
+        description: Zawiera początkowe medium, które sprowadziło użytkownika do usługi. Nazwa została zmieniona z traffic_source.medium.
+      - name: user_source
+        description: Zawiera początkowe źródło, które sprowadziło użytkownika do usługi. Zmieniono nazwę z traffic_source.source.
+      - name: session_id
+        description: Unikalny identyfikator sesji użytkownika. Ten identyfikator nie jest unikalny dla wszystkich użytkowników. Zmieniono nazwę z ga_session_id
+      - name: event_campaign
+        description: Zawiera kampanię powiązaną ze zdarzeniem (zwykle pochodzi z utm_campaign)
+      - name: event_source
+        description: Zawiera źródło powiązane ze zdarzeniem (zwykle pochodzi z utm_source)
+      - name: event_medium
+        description: Zawiera kampanię powiązaną ze zdarzeniem (zwykle pochodzi z utm_medium)
+      - name: event_content
+        description: Zawiera kampanię powiązaną ze zdarzeniem (zwykle pochodzi z utm_content)
+      - name: event_term
+        description: Zawiera kampanię powiązaną ze zdarzeniem (zwykle pochodzi z utm_term)
+      - name: stream_id
+        description: Identyfikator strumienia danych, z którego pochodzi zdarzenie.
+      - name: platform
+        description: Platforma strumienia danych (Web, IOS lub Android), z której pochodzi zdarzenie.
+      - name: privacy_info_analytics_storage
+        description: Możliwe wartości to Tak, Nie, Nieustawione (Yes, No, Unset)
+      - name: privacy_info_ads_storage
+        description: Czy kierowanie reklam jest włączone dla użytkownika. Możliwe wartości to Tak, Nie, Nieustawione (Yes, No, Unset)

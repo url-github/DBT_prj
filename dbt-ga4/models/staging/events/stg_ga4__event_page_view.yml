@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_ga4__event_page_view
+    description: Zdarzenia GA4 odfiltrowano tak, aby wyświetlały tylko zdarzenia „page_view”. Przestawia typowe parametry zdarzeń do oddzielnych kolumn. Identyfikuje pierwszą i ostatnią odsłonę strony w kolumnach „is_entrance” i „is_exit”.
+    columns:
+      - name: page_location
+        tests:
+          - not_null:
+              severity: warn

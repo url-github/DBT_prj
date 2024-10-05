@@ -1,0 +1,25 @@
+answers: # Musi to dopasować profil: w pliku DBT_Project.yml
+  target: dev # Domyślnie dla dowolnych poleceń DBT
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      # To use this, first run (in your terminal): export BIGQUERY_PROJECT="your_project_name"
+      # Wtedy DBT rozpozna zmienną
+      database: "{{ env_var('BIGQUERY_PROJECT') }}"
+      schema: dbt_pmackowka # Replace this with dbt_your_name, e.g. dbt_bob
+      threads: 64 # Max number of concurrent things running at once
+      timeout_seconds: 300
+      location: US
+      priority: interactive # BigQuery can use "batch" or "interactive". https://cloud.google.com/bigquery/docs/running-queries
+
+    # Nie używasz tego, ale przykład używania innego celu
+    production:
+      type: bigquery
+      method: oauth
+      database: "{{ env_var('BIGQUERY_PROJECT') }}"
+      schema: dbt_production
+      threads: 64
+      timeout_seconds: 300
+      location: US
+      priority: interactive

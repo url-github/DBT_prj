@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: payment
+      - name: staff
+      - name: customer
+      - name: store
+      - name: rental

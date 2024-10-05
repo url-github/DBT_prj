@@ -1,0 +1,1 @@
+{{ ga4.create_custom_event('view_search_results') }}

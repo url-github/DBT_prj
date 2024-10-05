@@ -1,0 +1,15 @@
+demo_dbt: # this needs to match the profile in your dbt_project.yml file
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: gothic-sequence-307320 # Replace this with your project id
+      dataset: dbt_dataset # Replace this with dbt_your_name, e.g. dbt_bilbo
+      impersonate_service_account: dbt-user@gothic-sequence-307320.iam.gserviceaccount.com # replace with service account
+    prod:
+      type: bigquery
+      method: service-account
+      keyfile: /home/airflow/gcs/data/dbt-user-creds.json 
+      project: gothic-sequence-307320 # Replace this with your project id
+      dataset: dbt_dataset # Replace this with dbt_your_name, e.g. dbt_bilbo

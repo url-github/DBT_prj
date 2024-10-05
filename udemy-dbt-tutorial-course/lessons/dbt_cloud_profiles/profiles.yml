@@ -1,0 +1,13 @@
+lessons:
+  target: production
+  outputs:
+    production:
+      dataset: dbt_production
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      location: US
+      method: oauth
+      priority: interactive
+      project: empik-ga360
+      threads: 60
+      type: bigquery
