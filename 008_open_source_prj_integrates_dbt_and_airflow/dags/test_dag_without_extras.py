@@ -1,4 +1,4 @@
-from datetime import datetime 
+from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
 
@@ -22,20 +22,22 @@ with DAG(
         'retries': 1,
         'retry_delay': timedelta(minutes=2),
     },
-    
+
 ) as dag:
 
     t1 = EmptyOperator(task_id='extract')
     t2 = EmptyOperator(task_id='load')
 
+	# zamiana example_dbt_project => 008_open_source_prj_integrates_dbt_and_airflow
+
     tg = DbtTaskGroup(
         group_id='transform',
         dbt_project_config=DbtProjectConfig(
-            project_path=Path('/opt/airflow/example_dbt_project/'),
-            manifest_path=Path('/opt/airflow/example_dbt_project/target/manifest.json'),
+            project_path=Path('/opt/airflow/008_open_source_prj_integrates_dbt_and_airflow/'),
+            manifest_path=Path('/opt/airflow/008_open_source_prj_integrates_dbt_and_airflow/target/manifest.json'),
         ),
         dbt_profile_config=DbtProfileConfig(
-            profiles_path=Path('/opt/airflow/example_dbt_project/profiles'),
+            profiles_path=Path('/opt/airflow/008_open_source_prj_integrates_dbt_and_airflow/profiles'),
             target='dev',
         ),
         dbt_airflow_config=DbtAirflowConfig(
