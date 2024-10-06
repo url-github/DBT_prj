@@ -12,7 +12,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 # Create the DAG with the specified schedule interval
-dag = DAG('test_dbt_simple_dag', default_args=default_args, schedule_interval=timedelta(days=1))
+dag = DAG('test_dbt_simple_dag', catchup=False, default_args=default_args, schedule_interval=timedelta(days=1))
 # Define dbt tasks using BashOperator
 task1 = BashOperator(
     task_id='dbt_task1',
